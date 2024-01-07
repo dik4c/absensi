@@ -1,0 +1,17 @@
+POST http://localhost:3000/api/anggota/get
+Content-Type: application/json
+
+{
+
+}
+
+###
+POST http://localhost:3000/api/anggota/upload
+Content-Type: application/json
+
+{
+    "nama": "daus mini",
+    "kelompok": "husbil",
+    "gender": "pria",
+    "status": "pelajar" 
+}

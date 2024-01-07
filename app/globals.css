@@ -2,26 +2,81 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: #f1f5f9;
+}
+
+@font-face {
+  font-family: rethink;
+  src: url(font/RethinkSans-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: poppins-medium;
+  src: url(font/Poppins-Medium.ttf);
+}
+
+@font-face {
+  font-family: poppins-bold;
+  src: url(font/Poppins-Bold.ttf);
+}
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url(font/Montserrat-Bold.ttf);
+}
+
+@font-face {
+  font-family: robotomono-medium;
+  src: url(font/RobotoMono-VariableFont_wght.ttf);
+}
+
+p, label, td {
+  font-family: rethink;
+  font-weight: 500;
+  font-size: .8em;
+}         
+
+.btn {
+  @apply px-[10px] py-[5px] bg-blue-500 text-white text-[.7em] font-robotomono-medium rounded-sm
+}
+
+.text-headline {
+  @apply font-poppins-bold font-bold text-[2.3em]
+}
+
+.font-rethink {
+  font-family: rethink;
+  font-weight: 500;
+}
+
+.font-robotomono-medium {
+  font-family: robotomono-medium
+}
+
+.font-montserrat-bold {
+  font-family: montserrat-bold;
+}
+
+.font-poppins-medium {
+  font-family: poppins-medium;
+  font-weight: 500;
+}
+
+.font-poppins-bold {
+  font-family: poppins-bold;
+}
+ 
+/* navbar */
+.nav-active {
+  @apply decoration-second underline underline-offset-4
+}
+
+/* anggota */
+.filter-active {
+  @apply bg-second text-black opacity-100
+}
+
+.btn-filter {
+  @apply text-[.55em] font-robotomono-medium px-[3px] py-[2px] border-slate-700 opacity-80 border-[1px] rounded-sm
 }
