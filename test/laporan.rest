@@ -1,0 +1,16 @@
+POST http://localhost:3000/api/laporan/get
+Content-Type: application/json
+
+{
+    "idAcara": "65aa25d2392baf3f55bf2dc7"
+}
+
+###
+POST http://localhost:3000/api/laporan/update
+Content-Type: application/json
+
+{
+    "idAcara": "65aa4d182b2c78b34fbefc81",
+    "idAnggota": "6599896d260041420d3e5d39",
+    "type": "hadir"
+}

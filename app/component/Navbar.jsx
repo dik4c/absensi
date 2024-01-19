@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function Navbar() {
-  const [showNav, setShowNav] = useState(true);
+  const [showNav, setShowNav] = useState(false);
   const [buttonActive, setButtonActive] = useState("dashboard");
 
   return (

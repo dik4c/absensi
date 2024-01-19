@@ -38,7 +38,19 @@ p, label, td {
 }         
 
 .btn {
-  @apply px-[10px] py-[5px] bg-blue-500 text-white text-[.7em] font-robotomono-medium rounded-sm
+  @apply px-[10px] py-[5px] text-white text-[.7em] font-robotomono-medium rounded-sm shadow-lg shadow-blue-500/50 bg-blue-500
+}
+
+.btn-normal {
+  @apply shadow-blue-500/50 bg-blue-500
+}
+
+.btn-danger {
+  @apply shadow-red-500/50 bg-red-500
+}
+
+.btn-mid {
+  @apply shadow-slate-500/50 bg-slate-500
 }
 
 .text-headline {

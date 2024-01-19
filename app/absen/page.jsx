@@ -5,8 +5,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Loading from "../component/loading";
 import Delete from "../component/delete";
+import { useSearchParams } from "next/navigation";
 
-export default function Pelajar() {
+export default function Absen() {
+  const searchParams = useSearchParams();
   const [dataAnggota, setDataAnggota] = useState(null);
   const [filterKelompok, setFilterKelompok] = useState(undefined);
   const [filterGender, setFilterGender] = useState(undefined);
@@ -15,6 +17,17 @@ export default function Pelajar() {
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [uid, setUid] = useState(undefined);
   const [page, setPage] = useState(1);
+  const [kehadiran, setKehadiran] = useState(null);
+  const idAcara = searchParams.get("s");
+
+  const handleClickAbsen = async (e, idAnggota) => {
+    const res = await axios.post("/api/laporan/update", {
+      type: e.target.value,
+      idAnggota,
+      idAcara,
+    });
+    console.log(res);
+  };
 
   const getDataAnggota = async () => {
     try {
@@ -25,6 +38,9 @@ export default function Pelajar() {
         page,
       };
       const res = await axios.post("/api/anggota/get", filter);
+      const kehadiran = await axios.post("/api/laporan/get", { idAcara });
+      setKehadiran(kehadiran.data);
+      console.log(kehadiran.data);
       setDataAnggota(res.data.result);
     } catch (error) {
       console.log(error.message);
@@ -35,7 +51,7 @@ export default function Pelajar() {
     getDataAnggota();
   }, [filterGender, filterKelompok, filterStatus, page]);
 
-  if (dataAnggota === null) return <Loading />;
+  if (dataAnggota === null || kehadiran === null) return <Loading />;
 
   return (
     <div className="w-full py-[20px]">
@@ -50,7 +66,7 @@ export default function Pelajar() {
         />
       )}
 
-      <h1 className="text-headline">Pelajar</h1>
+      <h1 className="text-headline">Absensi</h1>
 
       {/* filter data */}
       <div className="flex flex-col gap-[10px]">
@@ -209,6 +225,12 @@ export default function Pelajar() {
               </thead>
               <tbody>
                 {dataAnggota.map((i, idx) => {
+                  const bolos = kehadiran.bolos.includes(i._id);
+                  const izin = kehadiran.izin.includes(i._id);
+                  const hadir = kehadiran.hadir.includes(i._id);
+                  let value = bolos ? "bolos" : izin ? "izin" : "hadir";
+                  console.log(value);
+
                   return (
                     <tr className="border-b dark:border-neutral-500" key={idx}>
                       <td className="whitespace-nowrap px-6 py-4">{i.nama}</td>
@@ -221,44 +243,49 @@ export default function Pelajar() {
                       <td className="whitespace-nowrap px-6 py-4">
                         {i.status}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 relative">
-                        <div
-                          className={`flex flex-col gap-[5px] absolute bg-third shadow-md rounded-sm px-[15px] py-[10px] -left-[40px] -bottom-[10px] z-50 ${
-                            popupButtonIndex === idx ? "" : "hidden"
+                      <td className="whitespace-nowrap px-6 py-4 relative flex gap-[10px]">
+                        <select
+                          className="block appearance-none text-[.8em]  border-opacity-50 border-slate-500 !text-slate-700 py-3 px-4 pr-8 rounded leading-tight focus:ring-0 focus:border-second"
+                          onChange={(e) => handleClickAbsen(e, i._id)}
+                          defaultValue={value}
+                        >
+                          <option value="bolos">bolos</option>
+                          <option value="izin" className="">
+                            izin
+                          </option>
+                          <option value="hadir" className="">
+                            hadir
+                          </option>
+                        </select>
+
+                        {/* <button
+                          className={`btn ${
+                            bolos
+                              ? "btn-danger"
+                              : "!text-black !shadow-transparent"
                           }`}
+                          onClick={() => handleClickAbsen("bolos", i._id)}
                         >
-                          <Link href={`/pelajar/edit?s=${i._id}`}>edit</Link>
-                          <Link href={`/pelajar/details?s=${i._id}`}>
-                            details
-                          </Link>
-                          <button
-                            className="text-red-500"
-                            onClick={() => {
-                              setUid(i._id);
-                              setPopupButtonIndex(undefined);
-                              setDeleteDialog(true);
-                            }}
-                          >
-                            hapus
-                          </button>
-                        </div>
-                        <button
-                          className="w-[25px] cursor-pointer"
-                          onClick={() => {
-                            if (popupButtonIndex === idx)
-                              return setPopupButtonIndex(undefined);
-                            setPopupButtonIndex(idx);
-                          }}
-                        >
-                          <img
-                            src={
-                              popupButtonIndex === idx
-                                ? "/x.svg"
-                                : "/option.svg"
-                            }
-                            alt=""
-                          />
+                          bolos
                         </button>
+                        <button
+                          className={`btn ${
+                            izin ? "btn-mid" : "!text-black !shadow-transparent"
+                          }`}
+                          onClick={() => handleClickAbsen("izin", i._id)}
+                        >
+                          izin
+                        </button>
+                        <button
+                          className={`btn ${
+                            hadir
+                              ? "btn-normal"
+                              : "!text-black !shadow-transparent"
+                          }`}
+                          onClick={() => handleClickAbsen("hadir", i._id)}
+                        >
+                          hadir
+                        </button> */}
                       </td>
                     </tr>
                   );
