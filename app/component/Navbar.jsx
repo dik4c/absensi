@@ -10,7 +10,7 @@ export default function Navbar() {
   return (
     <nav>
       <div
-        className={`bg-first w-[50%] md:w-[20%] text-third px-[10px] md:px-[15px] py-[20px] rounded-md h-fit bottom-[2%] fixed duration-300 ${
+        className={`bg-first w-[50%] md:w-[20%] text-third px-[10px] md:px-[15px] py-[20px] rounded-md h-fit bottom-[2%] fixed duration-300 z-50 ${
           showNav ? "left-[20px]" : "-left-[55%] md:-left-[25%]"
         }`}
       >

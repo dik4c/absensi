@@ -2,26 +2,43 @@
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
-export default function UploadAcara() {
+export default function EditPelajar() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
-  const [dataAcara, setDataAcara] = useState({
+  const [dataAnggota, setDataAnggota] = useState({
     nama: "",
-    tempat: "al-hikmah",
-    waktu: null,
-    mulai: null,
-    selesai: null,
+    kelompok: "al-hikmah",
+    gender: "",
+    status: "",
   });
+  const idAnggota = searchParams.get("s");
+
+  const getData = async () => {
+    const res = await axios.post("/api/anggota/get", {
+      idAnggota,
+    });
+    setDataAnggota(res.data.result[0]);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("/api/acara/upload", dataAcara);
+      const res = await axios.post("/api/anggota/edit", {
+        ...dataAnggota,
+        idAnggota,
+      });
       setLoading(false);
       if (res.status === 201) {
-        router.replace("/acara");
+        router.replace("/pelajar");
       }
     } catch (error) {
       console.log(error);
@@ -29,6 +46,7 @@ export default function UploadAcara() {
     }
   };
 
+  console.log(dataAnggota);
   return (
     <div className="py-[50px]">
       {/* loading */}
@@ -49,87 +67,79 @@ export default function UploadAcara() {
         className="w-[90%] md:w-[30%] mx-auto my-[30px] flex flex-col gap-[15px] bg-[white] px-[20px] py-[15px] rounded-md shadow-md"
         onSubmit={handleSubmit}
       >
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col">
           <label>nama</label>
           <input
             type="text"
             placeholder="nama"
+            value={dataAnggota.nama}
             className="border-slate-500 rounded-[3px] border-opacity-50 py-[5px] text-slate-700 text-[.8rem] focus:border-second focus:ring-0"
             onChange={(e) => {
-              setDataAcara({
-                ...dataAcara,
+              setDataAnggota({
+                ...dataAnggota,
                 nama: e.target.value,
               });
             }}
             required
           />
         </div>
-
-        <div className="flex flex-col w-full">
-          <label htmlFor="tempat">tempat</label>
-          <select
-            id="tempat"
-            className="block appearance-none w-full text-[.8em] border-opacity-50 border-slate-500 text-slate-700 py-3 px-4 pr-8 rounded leading-tight focus:ring-0 focus:border-second"
-            onChange={(e) => {
-              setDataAcara({
-                ...dataAcara,
-                tempat: e.target.value,
-              });
-            }}
-            required
-          >
-            <option value="al-hikmah">al-hikmah</option>
-            <option value="husnudzon billah">husnudzon billah</option>
-            <option value="al-fatah">al-fatah</option>
-            <option value="giri mekar">giri mekar</option>
-          </select>
-        </div>
-
-        <div className="flex flex-col lg:flex-row gap-[15px] w-full overflow-hidden">
-          <div className="flex flex-col w-full lg:w-1/3">
-            <label htmlFor="waktu">waktu</label>
-            <input
-              id="waktu"
+        <div className="flex flex-col md:flex-row gap-[15px]">
+          <div className="flex flex-col w-full md:w-1/3">
+            <label htmlFor="kelompok">kelompok</label>
+            <select
+              id="kelompok"
+              value={dataAnggota.kelompok}
               className="block appearance-none w-full text-[.8em] border-opacity-50 border-slate-500 text-slate-700 py-3 px-4 pr-8 rounded leading-tight focus:ring-0 focus:border-second"
-              type="date"
               onChange={(e) => {
-                setDataAcara({
-                  ...dataAcara,
-                  waktu: e.target.value,
+                setDataAnggota({
+                  ...dataAnggota,
+                  kelompok: e.target.value,
                 });
               }}
               required
-            />
+            >
+              <option value="al-hikmah">al-hikmah</option>
+              <option value="husnudzon billah">husnudzon billah</option>
+              <option value="al-fatah">al-fatah</option>
+              <option value="giri mekar">giri mekar</option>
+            </select>
           </div>
-          <div className="flex flex-col w-full md:w-full lg:w-1/3">
-            <label htmlFor="mulai">mulai</label>
-            <input
-              id="mulai"
+          <div className="flex flex-col w-full md:w-1/3">
+            <label htmlFor="gender">gender</label>
+            <select
+              id="gender"
+              value={dataAnggota.gender}
               className="block appearance-none w-full text-[.8em] border-opacity-50 border-slate-500 text-slate-700 py-3 px-4 pr-8 rounded leading-tight focus:ring-0 focus:border-second"
-              type="time"
               onChange={(e) => {
-                setDataAcara({
-                  ...dataAcara,
-                  mulai: e.target.value,
+                setDataAnggota({
+                  ...dataAnggota,
+                  gender: e.target.value,
                 });
               }}
               required
-            />
+            >
+              <option value="pria">pria</option>
+              <option value="wanita">wanita</option>
+            </select>
           </div>
-          <div className="flex flex-col w-full md:w-full lg:w-1/3">
-            <label htmlFor="selesai">selesai</label>
-            <input
-              id="selesai"
-              type="time"
+          <div className="flex flex-col w-full md:w-1/3">
+            <label htmlFor="status">status</label>
+            <select
+              id="status"
+              value={dataAnggota.status}
               className="block appearance-none w-full text-[.8em] border-opacity-50 border-slate-500 text-slate-700 py-3 px-4 pr-8 rounded leading-tight focus:ring-0 focus:border-second"
               onChange={(e) => {
-                setDataAcara({
-                  ...dataAcara,
-                  selesai: e.target.value,
+                setDataAnggota({
+                  ...dataAnggota,
+                  status: e.target.value,
                 });
               }}
               required
-            />
+            >
+              <option value="pelajar">pelajar</option>
+              <option value="mahasiswa">mahasiswa</option>
+              <option value="usia nikah">usia nikah</option>
+            </select>
           </div>
         </div>
 

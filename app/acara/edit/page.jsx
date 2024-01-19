@@ -2,23 +2,41 @@
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
-export default function UploadAcara() {
+export default function EditAcara() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [dataAcara, setDataAcara] = useState({
     nama: "",
     tempat: "al-hikmah",
-    waktu: null,
-    mulai: null,
-    selesai: null,
+    waktu: "",
+    mulai: "",
+    selesai: "",
   });
+  const idAcara = searchParams.get("s");
+
+  const getData = async () => {
+    const res = await axios.post("/api/acara/get", {
+      idAcara,
+    });
+    setDataAcara(res.data.result[0]);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("/api/acara/upload", dataAcara);
+      const res = await axios.post("/api/acara/edit", {
+        ...dataAcara,
+        idAcara,
+      });
       setLoading(false);
       if (res.status === 201) {
         router.replace("/acara");
@@ -54,6 +72,7 @@ export default function UploadAcara() {
           <input
             type="text"
             placeholder="nama"
+            value={dataAcara.nama}
             className="border-slate-500 rounded-[3px] border-opacity-50 py-[5px] text-slate-700 text-[.8rem] focus:border-second focus:ring-0"
             onChange={(e) => {
               setDataAcara({
@@ -70,6 +89,7 @@ export default function UploadAcara() {
           <select
             id="tempat"
             className="block appearance-none w-full text-[.8em] border-opacity-50 border-slate-500 text-slate-700 py-3 px-4 pr-8 rounded leading-tight focus:ring-0 focus:border-second"
+            value={dataAcara.tempat}
             onChange={(e) => {
               setDataAcara({
                 ...dataAcara,
@@ -90,6 +110,7 @@ export default function UploadAcara() {
             <label htmlFor="waktu">waktu</label>
             <input
               id="waktu"
+              value={dataAcara.waktu.slice(0, 10)}
               className="block appearance-none w-full text-[.8em] border-opacity-50 border-slate-500 text-slate-700 py-3 px-4 pr-8 rounded leading-tight focus:ring-0 focus:border-second"
               type="date"
               onChange={(e) => {
@@ -105,6 +126,7 @@ export default function UploadAcara() {
             <label htmlFor="mulai">mulai</label>
             <input
               id="mulai"
+              value={dataAcara.mulai}
               className="block appearance-none w-full text-[.8em] border-opacity-50 border-slate-500 text-slate-700 py-3 px-4 pr-8 rounded leading-tight focus:ring-0 focus:border-second"
               type="time"
               onChange={(e) => {
@@ -121,6 +143,7 @@ export default function UploadAcara() {
             <input
               id="selesai"
               type="time"
+              value={dataAcara.selesai}
               className="block appearance-none w-full text-[.8em] border-opacity-50 border-slate-500 text-slate-700 py-3 px-4 pr-8 rounded leading-tight focus:ring-0 focus:border-second"
               onChange={(e) => {
                 setDataAcara({

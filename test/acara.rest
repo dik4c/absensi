@@ -1,0 +1,6 @@
+POST http://localhost:3000/api/acara/get
+Content-Type: application/json
+
+{
+    "idAcara": "659d3a44365db2879a6531aa"
+}

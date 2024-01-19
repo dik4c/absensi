@@ -10,12 +10,16 @@ const acaraSchema = new Schema(
       type: String,
       required: true,
     },
-    waktuMulai: {
+    waktu: {
       type: Date,
       required: true,
     },
-    waktuSelesai: {
-      type: Date,
+    mulai: {
+      type: String,
+      required: true,
+    },
+    selesai: {
+      type: String,
       reuired: true,
     },
   },

@@ -4,12 +4,16 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Loading from "../component/loading";
+import Delete from "../component/delete";
 
 export default function Pelajar() {
   const [dataAnggota, setDataAnggota] = useState(null);
   const [filterKelompok, setFilterKelompok] = useState(undefined);
   const [filterGender, setFilterGender] = useState(undefined);
   const [filterStatus, setFilterStatus] = useState(undefined);
+  const [popupButtonIndex, setPopupButtonIndex] = useState(undefined);
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const [uid, setUid] = useState(undefined);
   const [page, setPage] = useState(1);
 
   const getDataAnggota = async () => {
@@ -22,7 +26,6 @@ export default function Pelajar() {
       };
       const res = await axios.post("/api/anggota/get", filter);
       setDataAnggota(res.data);
-      console.log(res);
     } catch (error) {
       console.log(error.message);
     }
@@ -36,6 +39,9 @@ export default function Pelajar() {
 
   return (
     <div className="w-full py-[20px]">
+      {/* delete dialog */}
+      {deleteDialog && <Delete type="anggota" uid={uid} showDialog={set} />}
+
       <h1 className="text-headline">Pelajar</h1>
 
       {/* filter data */}
@@ -177,9 +183,6 @@ export default function Pelajar() {
               <thead className="border-b font-medium dark:border-neutral-500">
                 <tr>
                   <th scope="col" className="px-6 py-4">
-                    #
-                  </th>
-                  <th scope="col" className="px-6 py-4">
                     nama
                   </th>
                   <th scope="col" className="px-6 py-4">
@@ -191,15 +194,15 @@ export default function Pelajar() {
                   <th scope="col" className="px-6 py-4">
                     status
                   </th>
+                  <th scope="col" className="px-6 py-4">
+                    option
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {dataAnggota.result.map((i, idx) => {
                   return (
                     <tr className="border-b dark:border-neutral-500" key={idx}>
-                      <td className="whitespace-nowrap px-6 py-4 font-medium">
-                        {idx + 1}
-                      </td>
                       <td className="whitespace-nowrap px-6 py-4">{i.nama}</td>
                       <td className="whitespace-nowrap px-6 py-4">
                         {i.kelompok}
@@ -209,6 +212,45 @@ export default function Pelajar() {
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
                         {i.status}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 relative">
+                        <div
+                          className={`flex flex-col gap-[5px] absolute bg-third shadow-md rounded-sm px-[15px] py-[10px] -left-[40px] -bottom-[10px] z-50 ${
+                            popupButtonIndex === idx ? "" : "hidden"
+                          }`}
+                        >
+                          <Link href={`/pelajar/edit?s=${i._id}`}>edit</Link>
+                          <Link href={`/pelajar/details?s=${i._id}`}>
+                            details
+                          </Link>
+                          <button
+                            className="text-red-500"
+                            onClick={() => {
+                              setUid(i._id);
+                              setPopupButtonIndex(undefined);
+                              setDeleteDialog(true);
+                            }}
+                          >
+                            hapus
+                          </button>
+                        </div>
+                        <button
+                          className="w-[25px] cursor-pointer"
+                          onClick={() => {
+                            if (popupButtonIndex === idx)
+                              return setPopupButtonIndex(undefined);
+                            setPopupButtonIndex(idx);
+                          }}
+                        >
+                          <img
+                            src={
+                              popupButtonIndex === idx
+                                ? "/x.svg"
+                                : "/option.svg"
+                            }
+                            alt=""
+                          />
+                        </button>
                       </td>
                     </tr>
                   );

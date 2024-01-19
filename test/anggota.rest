@@ -2,7 +2,7 @@ POST http://localhost:3000/api/anggota/get
 Content-Type: application/json
 
 {
-
+    "idAnggota": "65992925301c1bd8f75070ed"
 }
 
 ###
@@ -14,4 +14,12 @@ Content-Type: application/json
     "kelompok": "husbil",
     "gender": "pria",
     "status": "pelajar" 
+}
+
+###
+POST http://localhost:3000/api/anggota/delete
+Content-Type: application/json
+
+{
+    "id": "6598f152301c1bd8f75070df"
 }

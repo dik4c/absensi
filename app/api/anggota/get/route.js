@@ -1,10 +1,12 @@
 import connectMongoDB from "@/libs/mongodb";
 import Anggota from "@/models/anggota";
+import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    const { nama, kelompok, gender, status, page } = await req.json();
+    const { nama, kelompok, gender, status, page, idAnggota } =
+      await req.json();
     await connectMongoDB();
 
     const itemPerPage = 8;
@@ -14,7 +16,8 @@ export async function POST(req) {
       nama === undefined &&
       kelompok === undefined &&
       gender === undefined &&
-      status === undefined
+      status === undefined &&
+      idAnggota === undefined
     ) {
       const count = await Anggota.countDocuments();
       const result = await Anggota.find().skip(skip).limit(itemPerPage);
@@ -26,6 +29,8 @@ export async function POST(req) {
     if (kelompok !== undefined) matchQuery.kelompok = kelompok;
     if (gender !== undefined) matchQuery.gender = gender;
     if (status !== undefined) matchQuery.status = status;
+    if (idAnggota !== undefined)
+      matchQuery._id = new mongoose.Types.ObjectId(idAnggota);
 
     const pipeline = [
       {

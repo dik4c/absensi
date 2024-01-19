@@ -10,16 +10,16 @@ export default function Acara() {
   const [filterKelompok, setFilterKelompok] = useState(undefined);
   const [filterNama, setFilterNama] = useState(undefined);
   const [page, setPage] = useState(1);
+  const [popupButtonIndex, setPopupButtonIndex] = useState(null);
 
   const getDataAnggota = async () => {
     try {
       const filter = {
-        kelompok: filterKelompok,
+        tempat: filterKelompok,
         page,
       };
       const res = await axios.post("/api/acara/get", filter);
       setDataAcara(res.data);
-      console.log(res);
     } catch (error) {
       console.log(error.message);
     }
@@ -33,7 +33,7 @@ export default function Acara() {
 
   return (
     <div className="w-full py-[20px]">
-      <h1 className="text-headline">Pelajar</h1>
+      <h1 className="text-headline">Acara</h1>
 
       {/* filter data */}
       <div className="flex flex-col gap-[10px]">
@@ -96,18 +96,18 @@ export default function Acara() {
       {/* table */}
       <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-          <div className="overflow-hidden">
+          <div className="">
             <table className="min-w-full text-left text-sm font-light">
               <thead className="border-b font-medium dark:border-neutral-500">
                 <tr>
                   <th scope="col" className="px-6 py-4">
-                    #
-                  </th>
-                  <th scope="col" className="px-6 py-4">
                     nama
                   </th>
                   <th scope="col" className="px-6 py-4">
-                    kelompok
+                    tempat
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    waktu
                   </th>
                   <th scope="col" className="px-6 py-4">
                     mulai
@@ -115,24 +115,53 @@ export default function Acara() {
                   <th scope="col" className="px-6 py-4">
                     selesai
                   </th>
+                  <th scope="col" className="px-6 py-4">
+                    option
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {dataAcara.result.map((i, idx) => {
                   return (
                     <tr className="border-b dark:border-neutral-500" key={idx}>
-                      <td className="whitespace-nowrap px-6 py-4 font-medium">
-                        {idx + 1}
-                      </td>
                       <td className="whitespace-nowrap px-6 py-4">{i.nama}</td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        {i.kelompok}
+                        {i.tempat}
                       </td>
+                      <td className="whitespace-nowrap px-6 py-4">{i.waktu}</td>
+                      <td className="whitespace-nowrap px-6 py-4">{i.mulai}</td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        {i.gender}
+                        {i.selesai}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
-                        {i.status}
+                      <td className="whitespace-nowrap px-6 py-4 relative">
+                        <div
+                          className={`flex flex-col gap-[5px] absolute bg-third shadow-md rounded-sm px-[15px] py-[10px] -left-[40px] -bottom-[10px] z-50 ${
+                            popupButtonIndex === idx ? "" : "hidden"
+                          }`}
+                        >
+                          <Link href={`/acara/edit?s=${i._id}`}>edit</Link>
+                          <Link href={`/acara/details?s=${i._id}`}>
+                            details
+                          </Link>
+                          <button className="text-red-500">hapus</button>
+                        </div>
+                        <button
+                          className="w-[25px] cursor-pointer"
+                          onClick={() => {
+                            if (popupButtonIndex === idx)
+                              return setPopupButtonIndex(undefined);
+                            setPopupButtonIndex(idx);
+                          }}
+                        >
+                          <img
+                            src={
+                              popupButtonIndex === idx
+                                ? "/x.svg"
+                                : "/option.svg"
+                            }
+                            alt=""
+                          />
+                        </button>
                       </td>
                     </tr>
                   );
@@ -162,12 +191,15 @@ export default function Acara() {
                 ? "cursor-not-allowed opacity-80"
                 : "opacity-100"
             }`}
-            onClick={() => setPage(page + 1)}
+            onClick={() => {
+              if (dataAcara.count <= 8) return;
+              setPage(page + 1);
+            }}
           >
             next
           </button>
         </div>
-        <Link href={"/pelajar/upload"} className="btn block w-fit ml-auto">
+        <Link href={"/acara/upload"} className="btn block w-fit ml-auto">
           add +
         </Link>
       </div>
