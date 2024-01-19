@@ -2,14 +2,22 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-export default function Delete({ type, uid }) {
+export default function Delete({
+  type,
+  uid,
+  setDeleteDialog,
+  dataAnggota,
+  setDataAnggota,
+}) {
   const router = useRouter();
-  console.log(uid);
   const handleDelete = async () => {
     try {
       const res = await axios.post(`/api/${type}/delete`, { id: uid });
       if (res.status === 201) {
-        router.reload();
+        const tmp = dataAnggota.filter((i) => i._id !== uid);
+        setDataAnggota(tmp);
+        setDeleteDialog(false);
+        router.refresh();
       }
     } catch (error) {
       console.log(error.message);
@@ -24,7 +32,9 @@ export default function Delete({ type, uid }) {
             apakah anda yakin ?
           </h1>
           <div className="flex gap-[10px] justify-center py-[10px]">
-            <button className="btn">tidak</button>
+            <button className="btn" onClick={() => setDeleteDialog(false)}>
+              tidak
+            </button>
             <button className="btn !bg-red-500" onClick={handleDelete}>
               yakin
             </button>

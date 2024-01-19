@@ -25,7 +25,7 @@ export default function Pelajar() {
         page,
       };
       const res = await axios.post("/api/anggota/get", filter);
-      setDataAnggota(res.data);
+      setDataAnggota(res.data.result);
     } catch (error) {
       console.log(error.message);
     }
@@ -40,7 +40,15 @@ export default function Pelajar() {
   return (
     <div className="w-full py-[20px]">
       {/* delete dialog */}
-      {deleteDialog && <Delete type="anggota" uid={uid} showDialog={set} />}
+      {deleteDialog && (
+        <Delete
+          type={"anggota"}
+          uid={uid}
+          setDeleteDialog={setDeleteDialog}
+          dataAnggota={dataAnggota}
+          setDataAnggota={setDataAnggota}
+        />
+      )}
 
       <h1 className="text-headline">Pelajar</h1>
 
@@ -200,7 +208,7 @@ export default function Pelajar() {
                 </tr>
               </thead>
               <tbody>
-                {dataAnggota.result.map((i, idx) => {
+                {dataAnggota.map((i, idx) => {
                   return (
                     <tr className="border-b dark:border-neutral-500" key={idx}>
                       <td className="whitespace-nowrap px-6 py-4">{i.nama}</td>
