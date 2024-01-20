@@ -85,6 +85,10 @@ p, label, td {
 }
 
 /* anggota */
+.container-filter {
+  @apply flex flex-col gap-[10px] bg-first text-white w-fit md:pl-[15px] pl-[10px] md:pr-[50px] pr-[10px] py-[20px] rounded-[5px]
+}
+
 .filter-active {
   @apply bg-second text-black opacity-100
 }

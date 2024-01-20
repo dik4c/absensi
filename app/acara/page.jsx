@@ -4,6 +4,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Loading from "../component/loading";
+import Filter from "../component/Filter";
 
 export default function Acara() {
   const [dataAcara, setDataAcara] = useState(null);
@@ -11,6 +12,14 @@ export default function Acara() {
   const [filterNama, setFilterNama] = useState(undefined);
   const [page, setPage] = useState(1);
   const [popupButtonIndex, setPopupButtonIndex] = useState(null);
+
+  const filterData = [
+    {
+      name: "kelompok",
+      filter: { condition: filterKelompok, set: setFilterKelompok },
+      option: ["al-hikmah", "husnudzon billah", "al-fatah", "giri mekar"],
+    },
+  ];
 
   const getDataAnggota = async () => {
     try {
@@ -36,63 +45,7 @@ export default function Acara() {
       <h1 className="text-headline">Acara</h1>
 
       {/* filter data */}
-      <div className="flex flex-col gap-[10px]">
-        {/* kelompok filter */}
-        <div>
-          <h1 className="font-poppins-bold text-[.7em]">kelompok :</h1>
-          <div className="flex gap-[5px]">
-            <button
-              className={`btn-filter ${
-                filterKelompok === "al-hikmah" ? "filter-active" : ""
-              }`}
-              onClick={() => {
-                if (filterKelompok === "al-hikmah")
-                  return setFilterKelompok(undefined);
-                setFilterKelompok("al-hikmah");
-              }}
-            >
-              al-hikmah
-            </button>
-            <button
-              className={`btn-filter ${
-                filterKelompok === "huznudzon billah" ? "filter-active" : ""
-              }`}
-              onClick={() => {
-                if (filterKelompok === "huznudzon billah")
-                  return setFilterKelompok(undefined);
-                setFilterKelompok("huznudzon billah");
-              }}
-            >
-              husnudzon billah
-            </button>
-            <button
-              className={`btn-filter ${
-                filterKelompok === "al-fatah" ? "filter-active" : ""
-              }`}
-              onClick={() => {
-                if (filterKelompok === "al-fatah")
-                  return setFilterKelompok(undefined);
-                setFilterKelompok("al-fatah");
-              }}
-            >
-              al-fatah
-            </button>
-            <button
-              className={`btn-filter ${
-                filterKelompok === "giri mekar" ? "filter-active" : ""
-              }`}
-              onClick={() => {
-                if (filterKelompok === "giri mekar")
-                  return setFilterKelompok(undefined);
-                setFilterKelompok("giri mekar");
-              }}
-            >
-              giri mekar
-            </button>
-          </div>
-        </div>
-      </div>
-
+      <Filter filterData={filterData} />
       {/* table */}
       <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">

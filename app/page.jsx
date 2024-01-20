@@ -52,13 +52,45 @@ export default function Dashboard() {
       <h2 className="font-poppins-bold text-[.7em] pb-[20px]">
         Acara hari ini :
       </h2>
-      {acara[0] === undefined ? (
+      {acara[0] === null ? (
         <div className="text-center py-[50px] font-robotomono-medium">
           tidak ada acara hari ini
         </div>
       ) : (
         <div className="flex flex-col md:flex-row gap-[15px]">
           {acara.map((i, idx) => {
+            const { hadirDetails, izin, bolos } = i.kehadiran;
+            const chartData = {
+              labels: [
+                "al-hikmah",
+                "husnudzon billah",
+                "al-fatah",
+                "giri mekar",
+                "tidak hadir",
+              ],
+              datasets: [
+                {
+                  label: "",
+                  data: [
+                    hadirDetails.alHikmah,
+                    hadirDetails.husbil,
+                    hadirDetails.jatiUtama,
+                    hadirDetails.giriMekar,
+                    bolos,
+                  ],
+                  backgroundColor: [
+                    "#1D2B53",
+                    "#7E2553",
+                    "#FF004D",
+                    "#FAEF5D",
+                    "#393939",
+                  ],
+                  hoverBackgroundColor: ["white"],
+                  borderWidth: 1,
+                },
+              ],
+            };
+
             return (
               <div
                 className="w-full md:w-[30%] md:mx-0 py-[15px] px-[10px] border-[1px] border-slate-800 border-opacity-50 rounded-[5px]"
