@@ -1,12 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function Navbar() {
+const DesktopNav = () => {
   const [showNav, setShowNav] = useState(false);
   const [buttonActive, setButtonActive] = useState("dashboard");
-
   return (
     <nav>
       <div
@@ -60,4 +59,56 @@ export default function Navbar() {
       </div>
     </nav>
   );
+};
+
+const MobileNav = () => {
+  return (
+    <div className="w-full fixed bottom-0 bg-first text-center text-white font-montserrat-bold text-[.9em] py-[10px] z-50">
+      <div className="flex justify-between items-center px-[15px]">
+        <div className="w-[40%] flex gap-[40px]">
+          <Link className="w-fit" href={"/pelajar"}>
+            <img src="/people-white.svg" className="w-[25px]" alt="" />
+          </Link>
+
+          <Link className="w-fit" href={"/acara"}>
+            <img src="/calendar-white.svg" className="w-[25px]" alt="" />
+          </Link>
+        </div>
+
+        <div className="w-[40%] flex flex-row-reverse gap-[40px]">
+          <Link className="w-fit" href={"/info"}>
+            <img src="/info.svg" className="w-[25px]" alt="" />
+          </Link>
+
+          <Link className="w-fit" href={"/help"}>
+            <img src="/help.svg" className="w-[25px]" alt="" />
+          </Link>
+        </div>
+        <Link
+          className="w-[40px] h-[40px] p-[10px] bg-second rounded-full fixed bottom-[-3px] left-[50%] transform -translate-x-1/2 -translate-y-1/2 outline outline-[10px] outline-first"
+          href={"/"}
+        >
+          <img src="/dashboard.svg" alt="" />
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+export default function Navbar() {
+  const [showNav, setShowNav] = useState(false);
+  const [buttonActive, setButtonActive] = useState("dashboard");
+  const [lebar, setLebar] = useState(0);
+
+  useEffect(() => {
+    setLebar(window.innerWidth);
+  }, []);
+
+  if (lebar > 320) {
+    return <DesktopNav />;
+  }
+
+  if (lebar <= 320) {
+    return <MobileNav />;
+  }
 }

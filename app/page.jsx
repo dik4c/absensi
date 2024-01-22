@@ -8,30 +8,6 @@ import Link from "next/link";
 export default function Dashboard() {
   const [acara, setAcara] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [chartData, setChartData] = useState({
-    labels: [
-      "al-hikmah",
-      "husnudzon billah",
-      "al-fatah",
-      "giri mekar",
-      "tidak hadir",
-    ],
-    datasets: [
-      {
-        label: "",
-        data: [300, 50, 100, 30, 78],
-        backgroundColor: [
-          "#1D2B53",
-          "#7E2553",
-          "#FF004D",
-          "#FAEF5D",
-          "#393939",
-        ],
-        hoverBackgroundColor: ["white"],
-        borderWidth: 1,
-      },
-    ],
-  });
 
   const getdata = async () => {
     const res = await axios.get("/api/acara/check");
@@ -46,15 +22,16 @@ export default function Dashboard() {
   if (loading) return <Loading />;
 
   return (
-    <div>
+    <div className="pb-[50px]">
       <h1 className="text-headline pb-[50px]">Dashboard</h1>
 
       <h2 className="font-poppins-bold text-[.7em] pb-[20px]">
         Acara hari ini :
       </h2>
-      {acara[0] === null ? (
-        <div className="text-center py-[50px] font-robotomono-medium">
-          tidak ada acara hari ini
+      {acara[0] === undefined ? (
+        <div className="text-center py-[50px] font-robotomono-medium opacity-70">
+          <img src="/unavailable.svg" className="mx-auto w-[30%]" alt="" />
+          <p>tidak ada acara hari ini</p>
         </div>
       ) : (
         <div className="flex flex-col md:flex-row gap-[15px]">
@@ -70,7 +47,7 @@ export default function Dashboard() {
               ],
               datasets: [
                 {
-                  label: "",
+                  label: "kehadiran",
                   data: [
                     hadirDetails.alHikmah,
                     hadirDetails.husbil,

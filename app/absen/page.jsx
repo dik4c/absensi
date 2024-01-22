@@ -6,6 +6,10 @@ import { useEffect, useState } from "react";
 import Loading from "../component/loading";
 import Delete from "../component/delete";
 import { useSearchParams } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import Filter from "../component/Filter";
+
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Absen() {
   const searchParams = useSearchParams();
@@ -20,12 +24,34 @@ export default function Absen() {
   const [kehadiran, setKehadiran] = useState(null);
   const idAcara = searchParams.get("s");
 
+  const filterData = [
+    {
+      name: "kelompok",
+      filter: { condition: filterKelompok, set: setFilterKelompok },
+      option: ["al-hikmah", "husnudzon billah", "al-fatah", "giri mekar"],
+    },
+    {
+      name: "gender",
+      filter: { condition: filterGender, set: setFilterGender },
+      option: ["pria", "wanita"],
+    },
+    {
+      name: "status",
+      filter: { condition: filterStatus, set: setFilterStatus },
+      option: ["pelajar", "mahasiswa", "usia menikah"],
+    },
+  ];
+
   const handleClickAbsen = async (e, idAnggota) => {
     const res = await axios.post("/api/laporan/update", {
       type: e.target.value,
       idAnggota,
       idAcara,
     });
+
+    if (res.status === 200) {
+      toast.success("berhasil mengupdate data");
+    }
     console.log(res);
   };
 
@@ -40,7 +66,6 @@ export default function Absen() {
       const res = await axios.post("/api/anggota/get", filter);
       const kehadiran = await axios.post("/api/laporan/get", { idAcara });
       setKehadiran(kehadiran.data);
-      console.log(kehadiran.data);
       setDataAnggota(res.data.result);
     } catch (error) {
       console.log(error.message);
@@ -55,6 +80,8 @@ export default function Absen() {
 
   return (
     <div className="w-full py-[20px]">
+      <ToastContainer position="top-right" />
+
       {/* delete dialog */}
       {deleteDialog && (
         <Delete
@@ -69,135 +96,7 @@ export default function Absen() {
       <h1 className="text-headline">Absensi</h1>
 
       {/* filter data */}
-      <div className="flex flex-col gap-[10px]">
-        {/* kelompok filter */}
-        <div>
-          <h1 className="font-poppins-bold text-[.7em]">kelompok :</h1>
-          <div className="flex gap-[5px]">
-            <button
-              className={`btn-filter ${
-                filterKelompok === "al-hikmah" ? "filter-active" : ""
-              }`}
-              onClick={() => {
-                if (filterKelompok === "al-hikmah")
-                  return setFilterKelompok(undefined);
-                setFilterKelompok("al-hikmah");
-              }}
-            >
-              al-hikmah
-            </button>
-            <button
-              className={`btn-filter ${
-                filterKelompok === "huznudzon billah" ? "filter-active" : ""
-              }`}
-              onClick={() => {
-                if (filterKelompok === "huznudzon billah")
-                  return setFilterKelompok(undefined);
-                setFilterKelompok("husnudzon billah");
-              }}
-            >
-              husnudzon billah
-            </button>
-            <button
-              className={`btn-filter ${
-                filterKelompok === "al-fatah" ? "filter-active" : ""
-              }`}
-              onClick={() => {
-                if (filterKelompok === "al-fatah")
-                  return setFilterKelompok(undefined);
-                setFilterKelompok("al-fatah");
-              }}
-            >
-              al-fatah
-            </button>
-            <button
-              className={`btn-filter ${
-                filterKelompok === "giri mekar" ? "filter-active" : ""
-              }`}
-              onClick={() => {
-                if (filterKelompok === "giri mekar")
-                  return setFilterKelompok(undefined);
-                setFilterKelompok("giri mekar");
-              }}
-            >
-              giri mekar
-            </button>
-          </div>
-        </div>
-
-        {/* gender filter */}
-        <div>
-          <h1 className="font-poppins-bold text-[.7em]">gender :</h1>
-          <div className="flex gap-[5px]">
-            <button
-              className={`btn-filter ${
-                filterGender === "pria" ? "filter-active" : ""
-              }`}
-              onClick={() => {
-                if (filterGender === "pria") return setFilterGender(undefined);
-                setFilterGender("pria");
-              }}
-            >
-              pria
-            </button>
-            <button
-              className={`btn-filter ${
-                filterGender === "wanita" ? "filter-active" : ""
-              }`}
-              onClick={() => {
-                if (filterGender === "wanita")
-                  return setFilterGender(undefined);
-                setFilterGender("wanita");
-              }}
-            >
-              wanita
-            </button>
-          </div>
-        </div>
-
-        {/* status filter */}
-        <div>
-          <h1 className="font-poppins-bold text-[.7em]">status :</h1>
-          <div className="flex gap-[5px]">
-            <button
-              className={`btn-filter ${
-                filterStatus === "pelajar" ? "filter-active" : ""
-              }`}
-              onClick={() => {
-                if (filterStatus === "pelajar")
-                  return setFilterStatus(undefined);
-                setFilterStatus("pelajar");
-              }}
-            >
-              pelajar
-            </button>
-            <button
-              className={`btn-filter ${
-                filterStatus === "mahasiswa" ? "filter-active" : ""
-              }`}
-              onClick={() => {
-                if (filterStatus === "mahasiswa")
-                  return setFilterStatus(undefined);
-                setFilterStatus("mahasiswa");
-              }}
-            >
-              mahasiswa
-            </button>
-            <button
-              className={`btn-filter ${
-                filterStatus === "usia nikah" ? "filter-active" : ""
-              }`}
-              onClick={() => {
-                if (filterStatus === "usia nikah")
-                  return setFilterStatus(undefined);
-                setFilterStatus("usia nikah");
-              }}
-            >
-              usia nikah
-            </button>
-          </div>
-        </div>
-      </div>
+      <Filter filterData={filterData} />
 
       {/* table */}
       <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">

@@ -41,7 +41,7 @@ export default function Acara() {
   if (dataAcara === null) return <Loading />;
 
   return (
-    <div className="w-full py-[20px]">
+    <div className="w-full py-[20px] pb-[100px]">
       <h1 className="text-headline">Acara</h1>
 
       {/* filter data */}
@@ -128,7 +128,7 @@ export default function Acara() {
       <div className="flex py-[15px]">
         <div className="flex gap-[10px]">
           <button
-            className={`btn !bg-first ${
+            className={`btn !bg-first !shadow-none ${
               page === 1 ? "cursor-not-allowed opacity-80" : "opacity-100"
             }`}
             onClick={() => {
@@ -139,7 +139,7 @@ export default function Acara() {
             prev
           </button>
           <button
-            className={`btn !bg-first ${
+            className={`btn !bg-first !shadow-none ${
               dataAcara.count <= 8
                 ? "cursor-not-allowed opacity-80"
                 : "opacity-100"

@@ -1,6 +1,6 @@
 export default function Filter({ filterData }) {
   return (
-    <div className="container-filter">
+    <div className="container-filter my-[20px]">
       {filterData.map((i, idx) => {
         return (
           <div>
@@ -10,9 +10,6 @@ export default function Filter({ filterData }) {
 
             <div className="flex gap-[8px]">
               {i.option.map((opt, index) => {
-                {
-                  console.log(opt);
-                }
                 return (
                   <div className="flex gap-[5px]" key={index + 1}>
                     <button

@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <Navbar />
-        <div className="px-[10px] py-[10px] xl:px-[30px] w-full">
+        <div className="px-[10px] py-[10px] xl:px-[30px] w-full pb-[100px]">
           {children}
         </div>
       </body>
