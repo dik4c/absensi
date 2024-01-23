@@ -104,11 +104,11 @@ export default function Navbar() {
     setLebar(window.innerWidth);
   }, []);
 
-  if (lebar > 320) {
+  if (lebar > 425) {
     return <DesktopNav />;
   }
 
-  if (lebar <= 320) {
+  if (lebar <= 425) {
     return <MobileNav />;
   }
 }
