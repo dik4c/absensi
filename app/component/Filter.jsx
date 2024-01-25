@@ -3,7 +3,7 @@ export default function Filter({ filterData }) {
     <div className="container-filter my-[20px]">
       {filterData.map((i, idx) => {
         return (
-          <div>
+          <div key={idx}>
             <h1 className="font-poppins-bold text-[.7em]" key={idx}>
               {i.name} :
             </h1>

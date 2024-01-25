@@ -5,14 +5,16 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Loading from "../component/loading";
 import Filter from "../component/Filter";
+import Delete from "../component/delete";
 
 export default function Acara() {
   const [dataAcara, setDataAcara] = useState(null);
   const [filterKelompok, setFilterKelompok] = useState(undefined);
   const [filterNama, setFilterNama] = useState(undefined);
   const [page, setPage] = useState(1);
-  const [popupButtonIndex, setPopupButtonIndex] = useState(null);
-
+  const [popupButtonIndex, setPopupButtonIndex] = useState(undefined);
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const [uid, setUid] = useState(undefined);
   const filterData = [
     {
       name: "kelompok",
@@ -42,6 +44,17 @@ export default function Acara() {
 
   return (
     <div className="w-full py-[20px] pb-[100px]">
+      {/* delete dialog */}
+      {deleteDialog && (
+        <Delete
+          type={"acara"}
+          uid={uid}
+          setDeleteDialog={setDeleteDialog}
+          data={dataAcara}
+          set={setDataAcara}
+        />
+      )}
+
       <h1 className="text-headline">Acara</h1>
 
       {/* filter data */}
@@ -96,7 +109,16 @@ export default function Acara() {
                           <Link href={`/acara/details?s=${i._id}`}>
                             details
                           </Link>
-                          <button className="text-red-500">hapus</button>
+                          <button
+                            className="text-red-500"
+                            onClick={() => {
+                              setUid(i._id);
+                              setPopupButtonIndex(undefined);
+                              setDeleteDialog(true);
+                            }}
+                          >
+                            hapus
+                          </button>
                         </div>
                         <button
                           className="w-[25px] cursor-pointer"

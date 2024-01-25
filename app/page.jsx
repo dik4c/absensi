@@ -23,7 +23,14 @@ export default function Dashboard() {
 
   return (
     <div className="pb-[50px]">
-      <h1 className="text-headline pb-[50px]">Dashboard</h1>
+      <h1 className="text-headline text-first drop-shadow-[0_35px_35px_rgba(0,0,0,0.15)] pb-[50px] relative px-[20px] underline">
+        <img
+          src="/blob.svg"
+          className="absolute top-[-40px] left-[-15px] w-[150px] -z-50"
+          alt=""
+        />
+        Dashboard
+      </h1>
 
       <h2 className="font-poppins-bold text-[.7em] pb-[20px]">
         Acara hari ini :
@@ -108,8 +115,6 @@ export default function Dashboard() {
           })}
         </div>
       )}
-
-      {/* container main */}
     </div>
   );
 }

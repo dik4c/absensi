@@ -54,7 +54,7 @@ p, label, td {
 }
 
 .text-headline {
-  @apply font-poppins-bold font-bold text-[2.3em]
+  @apply font-poppins-bold font-bold text-[2.3em] my-[40px]
 }
 
 .font-rethink {

@@ -2,20 +2,14 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-export default function Delete({
-  type,
-  uid,
-  setDeleteDialog,
-  dataAnggota,
-  setDataAnggota,
-}) {
+export default function Delete({ type, uid, setDeleteDialog, data, set }) {
   const router = useRouter();
   const handleDelete = async () => {
     try {
       const res = await axios.post(`/api/${type}/delete`, { id: uid });
       if (res.status === 201) {
-        const tmp = dataAnggota.filter((i) => i._id !== uid);
-        setDataAnggota(tmp);
+        const tmp = data.result.filter((i) => i._id !== uid);
+        set({ count: data.count, result: tmp });
         setDeleteDialog(false);
         router.refresh();
       }
